@@ -4,7 +4,7 @@ const request = indexedDB.open('19-budget-tracker', 1);
 request.onupgradeneeded = function (event) {
   const db = event.target.result;
 
-  db.createObjectStore("new-transaction", { autoIncrement: true });
+  db.createObjectStore("new_transaction", { autoIncrement: true });
 };
 
 request.onsuccess = function (event) {
@@ -19,21 +19,21 @@ request.onerror = function (event) {
     console.log(event.target.errorCode);
 };
 
-function saverecord(record){
-    const transaction = db.transaction(["new-transaction"], "readwrite");
-    const budgetObectStore = transaction.objectStore("new-transaction");
+function saveRecord(record){
+    const transaction = db.transaction(["new_transaction"], "readwrite");
+    const budgetObectStore = transaction.objectStore("new_transaction");
 
     budgetObectStore.add(record);
 }
 
 function uploadBudget(){
-    const transaction = db.transaction(["new-transaction"], "readwrite");
-    const budgetObectStore = transaction.objectStore("new-transaction");
+    const transaction = db.transaction(["new_transaction"], "readwrite");
+    const budgetObectStore = transaction.objectStore("new_transaction");
     const getAll = budgetObectStore.getAll();
 
     getAll.onsuccess = function (){
         if(getAll.result.length > 0){
-            fetch("<enter-api-item-here>", {
+            fetch("/api/transaction", {
                 method: "post",
                 body: JSON.stringify(getAll.result),
                 headers: {
@@ -45,9 +45,9 @@ function uploadBudget(){
             if(serverResponse.message){
                 throw new Error(serverResponse);
             }
-            const transaction = db.transaction(["new-transaction"], "readwrite");
+            const transaction = db.transaction(["new_transaction"], "readwrite");
 
-            const budgetObectStore = transaction.objectStore("new-transaction");
+            const budgetObectStore = transaction.objectStore("new_transaction");
             budgetObectStore.clear();
 
             alert("all values have been submitted")
